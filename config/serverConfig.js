@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 
 const configureServer = (app) => {
-  const allowedOrigins = ['http://localhost:5173', 'https://invito.com'];
+  const allowedOrigins = ['http://localhost:5173', 'https://zeptocards.pages.dev'];
 
   const corsOptions = {
     origin: (origin, callback) => {
