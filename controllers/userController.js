@@ -20,6 +20,9 @@ const UserController = {
     try {
       const { email, password, name, standId } = req.body;
   
+      const existingUser = await User.findOne({ email });
+
+      if (existingUser) return res.status(404).json({ message: "This email is already registered!" });
 
       const hashedPassword = await bcrypt.hash(password, 10);
   
@@ -53,10 +56,10 @@ const UserController = {
       const { email, password } = req.body;
 
       const user = await User.findOne({ email });
-      if (!user) return res.status(404).json({ message: "User not found." });
+      if (!user) return res.status(404).json({ message: "This email isn't registered with us!" });
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) return res.status(401).json({ message: "Invalid credentials." });
+      if (!isPasswordValid) return res.status(401).json({ message: "Invalid password." });
 
       const token = generateToken(user);
       res.status(200).json({ message: "Login successful.", token, user });

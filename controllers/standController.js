@@ -15,7 +15,7 @@ module.exports = {
   generateBulk: async (req, res) => {
     try {
       const { quantity, type } = req.body; 
-      const signupBaseUrl = process.env.USER_SIGNUP_URL || "https://example.com/signup"; 
+      const signupBaseUrl = process.env.USER_SIGNUP_URL || "https://zeptocards.pages.dev/signup"; 
       const generatedData = [];
     
       for (let i = 0; i < quantity; i++) {
@@ -64,6 +64,7 @@ module.exports = {
     try {  
         const { standId } = req.params;  
         // Fetch the stand details, populating the linked business
+        if (!standId||standId==="null") return res.status(404).json({ message: "StandId not provided." });  
         const stand = await Stand.findOne({ _id: standId }).populate("linkedBusiness");  
         if (!stand) return res.status(404).json({ message: "Stand not found." });  
 
@@ -93,7 +94,7 @@ module.exports = {
     try {
       const { standId } = req.params;
       const stand = await Stand.findOneAndUpdate(
-        { standId },
+        { _id: standId },
         { status: "unlinked", linkedBusiness: null }, // User association remains
         { new: true }
       );
